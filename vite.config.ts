@@ -4,7 +4,7 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/FORMCLIP/',
+  base: '/REGISTRO-PMCD/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
