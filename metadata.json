@@ -1,0 +1,6 @@
+{
+  "name": "FORMCLIP",
+  "description": "A refined form capture system integrating React with Google Apps Script, Google Sheets, and automated emails.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
