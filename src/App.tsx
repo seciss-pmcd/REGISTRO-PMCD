@@ -51,7 +51,9 @@ export default function App() {
     try {
       await gasService.submitForm(formData);
       setStatus('success');
-      setMessage('Su registro fue recibido correctamente. Revise su correo electrónico para consultar la confirmación.');
+      setMessage(
+        'Su registro fue recibido correctamente. Revise su correo electrónico para consultar la confirmación.'
+      );
     } catch (error) {
       console.error(error);
       setStatus('error');
@@ -63,8 +65,11 @@ export default function App() {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
     if (status !== 'loading') {
       setStatus('idle');
       setMessage('');
@@ -74,6 +79,7 @@ export default function App() {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFormData({ ...formData, file });
+
     if (status !== 'loading') {
       setStatus('idle');
       setMessage('');
@@ -81,7 +87,16 @@ export default function App() {
   };
 
   const resetForm = () => {
-    setFormData(initialFormData);
+    setFormData({
+      fullName: '',
+      workplace: '',
+      subjects: '',
+      groups: '',
+      phone: '',
+      email: '',
+      selectedCourse: COURSE_OPTIONS[0],
+      file: null
+    });
     setStatus('idle');
     setMessage('');
   };
@@ -117,8 +132,9 @@ export default function App() {
               <GraduationCap size={24} />
             </div>
             <p className="text-sm leading-6 text-slate-700">
-              Complete el formulario y adjunte su propuesta de asignatura o credencial de trabajador UNAM.
-              Sus datos y documentos serán revisados por el Programa Maestro de Capacitación Docente.
+              Complete el formulario y adjunte su propuesta de asignatura o credencial de
+              trabajador UNAM. Sus datos y documentos serán revisados por el Programa Maestro de
+              Capacitación Docente.
             </p>
           </div>
         </section>
@@ -147,10 +163,13 @@ export default function App() {
                   <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-700">
                     <CheckCircle2 size={34} />
                   </div>
+
                   <h3 className="text-2xl font-black text-slate-950">Registro recibido</h3>
+
                   <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-600">
                     {message}
                   </p>
+
                   <button
                     type="button"
                     onClick={resetForm}
@@ -249,4 +268,86 @@ export default function App() {
                         type="file"
                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         onChange={handleFileChange}
-                        className="w-full rounded-md border border
+                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none file:mr-4 file:rounded file:border-0 file:bg-[#082657] file:px-3 file:py-2 file:text-xs file:font-bold file:text-white"
+                      />
+                    </label>
+
+                    <label className="md:col-span-2">
+                      <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
+                        Curso que desea tomar
+                      </span>
+                      <select
+                        required
+                        name="selectedCourse"
+                        value={formData.selectedCourse}
+                        onChange={handleChange}
+                        className="w-full cursor-pointer rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none transition focus:border-[#e3b64b] focus:bg-white focus:ring-4 focus:ring-[#e3b64b]/20"
+                      >
+                        {COURSE_OPTIONS.map((course) => (
+                          <option key={course} value={course}>
+                            {course}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+
+                  <p className="rounded-md border-l-4 border-[#e3b64b] bg-[#fff8e6] px-4 py-3 text-xs leading-5 text-slate-700">
+                    El teléfono de contacto es opcional. Todos los demás campos son obligatorios.
+                    El archivo adjunto debe pesar máximo 8 MB.
+                  </p>
+
+                  {status === 'error' && (
+                    <div className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+                      <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                      <p>{message}</p>
+                    </div>
+                  )}
+
+                  <button
+                    disabled={status === 'loading'}
+                    type="submit"
+                    className="flex w-full items-center justify-center gap-3 rounded-md bg-[#082657] px-5 py-4 text-xs font-black uppercase tracking-[0.25em] text-white transition hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60"
+                  >
+                    {status === 'loading' ? (
+                      <>
+                        <RefreshCw className="animate-spin" size={16} />
+                        Enviando
+                      </>
+                    ) : (
+                      <>
+                        Enviar registro
+                        <ChevronRight size={16} />
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+
+          <aside className="rounded-lg border border-slate-200 bg-white p-6 shadow-lg">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-[#f7edcf] text-[#082657]">
+              <GraduationCap size={26} />
+            </div>
+
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#082657]">
+              PMCD · SECISS
+            </p>
+
+            <h3 className="mt-3 text-xl font-black text-slate-950">
+              Revisión de registro
+            </h3>
+
+            <p className="mt-4 text-sm leading-6 text-slate-600">
+              Al enviar el formulario, recibirá un correo de confirmación. Posteriormente, el equipo
+              revisará sus datos y documento para enviar las instrucciones del curso elegido.
+            </p>
+
+            <div className="mt-6 h-1 w-16 rounded-full bg-[#e3b64b]" />
+          </aside>
+        </motion.section>
+      </div>
+    </main>
+  );
+}
