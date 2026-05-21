@@ -114,9 +114,22 @@ export default function App() {
           className="overflow-hidden rounded-xl bg-[#082657] text-white shadow-lg"
         >
           <div className="px-6 py-10 text-center md:px-10">
-            <div className="mx-auto mb-5 inline-flex rounded-full bg-[#e3b64b] px-5 py-2 text-[10px] font-black uppercase tracking-[0.35em] text-[#082657]">
-              PMCD · SECISS · FM-UNAM
-            </div>
+  <div className="mb-6 flex items-center justify-center gap-6">
+    <img
+      src="/REGISTRO-PMCD/logos/logo-facmed.png"
+      alt="Logo UNAM"
+      className="h-16 w-auto object-contain md:h-20"
+    />
+    <img
+      src="/REGISTRO-PMCD/logos/logo-SECISS.png"
+      alt="Logo Facultad de Medicina UNAM"
+      className="h-16 w-auto object-contain md:h-20"
+    />
+  </div>
+
+  <div className="mx-auto mb-5 inline-flex rounded-full bg-[#e3b64b] px-5 py-2 text-[10px] font-black uppercase tracking-[0.35em] text-[#082657]">
+    PMCD · SECISS · FM-UNAM
+  </div>
 
             <h1 className="text-3xl font-black tracking-tight md:text-4xl">
               Programa Maestro de Capacitación Docente
