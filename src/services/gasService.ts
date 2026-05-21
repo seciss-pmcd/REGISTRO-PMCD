@@ -2,8 +2,12 @@ const GAS_URL = import.meta.env.VITE_GAS_URL;
 const MAX_FILE_SIZE_MB = 8;
 
 export interface RegistrationData {
-  fullName: string;
+  firstName: string;
+  paternalLastName: string;
+  maternalLastName: string;
   workplace: string;
+  institution: string;
+  academicLevel: string;
   subjects: string;
   groups: string;
   phone: string;
@@ -34,7 +38,7 @@ export const gasService = {
     }
 
     if (!data.file) {
-      throw new Error('Debe adjuntar un archivo.');
+      throw new Error('Debe adjuntar propuesta de la asignatura o credencial de trabajador UNAM.');
     }
 
     const maxBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -46,8 +50,12 @@ export const gasService = {
     const fileBase64 = await fileToBase64(data.file);
 
     const payload = {
-      fullName: data.fullName,
+      firstName: data.firstName,
+      paternalLastName: data.paternalLastName,
+      maternalLastName: data.maternalLastName,
       workplace: data.workplace,
+      institution: data.institution,
+      academicLevel: data.academicLevel,
       subjects: data.subjects,
       groups: data.groups,
       phone: data.phone,
