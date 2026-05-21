@@ -8,6 +8,8 @@ import {
   MapPin,
   Users,
   Upload,
+  Building2,
+  BadgeCheck,
   ChevronRight,
   RefreshCw,
   CheckCircle2,
@@ -27,9 +29,20 @@ const COURSE_OPTIONS = [
   'Educación en Ciencias de la Salud con Perspectiva de Género'
 ];
 
+const ACADEMIC_LEVEL_OPTIONS = [
+  'Pregrado',
+  'Posgrado',
+  'Ambos',
+  'Otro'
+];
+
 const initialFormData: RegistrationData = {
-  fullName: '',
+  firstName: '',
+  paternalLastName: '',
+  maternalLastName: '',
   workplace: '',
+  institution: '',
+  academicLevel: 'Pregrado',
   subjects: '',
   groups: '',
   phone: '',
@@ -87,16 +100,7 @@ export default function App() {
   };
 
   const resetForm = () => {
-    setFormData({
-      fullName: '',
-      workplace: '',
-      subjects: '',
-      groups: '',
-      phone: '',
-      email: '',
-      selectedCourse: COURSE_OPTIONS[0],
-      file: null
-    });
+    setFormData(initialFormData);
     setStatus('idle');
     setMessage('');
   };
@@ -132,9 +136,9 @@ export default function App() {
               <GraduationCap size={24} />
             </div>
             <p className="text-sm leading-6 text-slate-700">
-              Complete el formulario y adjunte su propuesta de asignatura o credencial de
-              trabajador UNAM. Sus datos y documentos serán revisados por el Programa Maestro de
-              Capacitación Docente.
+              Complete el formulario y adjunte su propuesta de asignatura o credencial de trabajador
+              UNAM. Sus datos y documentos serán revisados por el Programa Maestro de Capacitación
+              Docente.
             </p>
           </div>
         </section>
@@ -180,15 +184,41 @@ export default function App() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid gap-5 md:grid-cols-2">
-                    <label className="md:col-span-2">
+                  <div className="grid gap-5 md:grid-cols-3">
+                    <label>
                       <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
-                        Nombre completo
+                        Nombre(s)
                       </span>
                       <input
                         required
-                        name="fullName"
-                        value={formData.fullName}
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none transition focus:border-[#e3b64b] focus:bg-white focus:ring-4 focus:ring-[#e3b64b]/20"
+                      />
+                    </label>
+
+                    <label>
+                      <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
+                        Apellido paterno
+                      </span>
+                      <input
+                        required
+                        name="paternalLastName"
+                        value={formData.paternalLastName}
+                        onChange={handleChange}
+                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none transition focus:border-[#e3b64b] focus:bg-white focus:ring-4 focus:ring-[#e3b64b]/20"
+                      />
+                    </label>
+
+                    <label>
+                      <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
+                        Apellido materno
+                      </span>
+                      <input
+                        required
+                        name="maternalLastName"
+                        value={formData.maternalLastName}
                         onChange={handleChange}
                         className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none transition focus:border-[#e3b64b] focus:bg-white focus:ring-4 focus:ring-[#e3b64b]/20"
                       />
@@ -209,13 +239,11 @@ export default function App() {
 
                     <label>
                       <span className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
-                        <Mail size={13} /> Correo electrónico
+                        <Building2 size={13} /> Institución
                       </span>
                       <input
-                        required
-                        type="email"
-                        name="email"
-                        value={formData.email}
+                        name="institution"
+                        value={formData.institution}
                         onChange={handleChange}
                         className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none transition focus:border-[#e3b64b] focus:bg-white focus:ring-4 focus:ring-[#e3b64b]/20"
                       />
@@ -223,7 +251,26 @@ export default function App() {
 
                     <label>
                       <span className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
-                        <BookOpen size={13} /> Asignatura(s) que imparte
+                        <BadgeCheck size={13} /> Nivel al que imparte
+                      </span>
+                      <select
+                        required
+                        name="academicLevel"
+                        value={formData.academicLevel}
+                        onChange={handleChange}
+                        className="w-full cursor-pointer rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none transition focus:border-[#e3b64b] focus:bg-white focus:ring-4 focus:ring-[#e3b64b]/20"
+                      >
+                        {ACADEMIC_LEVEL_OPTIONS.map((level) => (
+                          <option key={level} value={level}>
+                            {level}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="md:col-span-2">
+                      <span className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
+                        <BookOpen size={13} /> Asignatura(s) que imparte en Pregrado y/o Posgrado
                       </span>
                       <input
                         required
@@ -239,7 +286,6 @@ export default function App() {
                         <Users size={13} /> Grupo(s) asignado(s)
                       </span>
                       <input
-                        required
                         name="groups"
                         value={formData.groups}
                         onChange={handleChange}
@@ -261,6 +307,20 @@ export default function App() {
 
                     <label>
                       <span className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
+                        <Mail size={13} /> Correo electrónico
+                      </span>
+                      <input
+                        required
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium outline-none transition focus:border-[#e3b64b] focus:bg-white focus:ring-4 focus:ring-[#e3b64b]/20"
+                      />
+                    </label>
+
+                    <label>
+                      <span className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
                         <Upload size={13} /> Propuesta o credencial UNAM
                       </span>
                       <input
@@ -272,7 +332,7 @@ export default function App() {
                       />
                     </label>
 
-                    <label className="md:col-span-2">
+                    <label className="md:col-span-3">
                       <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
                         Curso que desea tomar
                       </span>
@@ -293,8 +353,10 @@ export default function App() {
                   </div>
 
                   <p className="rounded-md border-l-4 border-[#e3b64b] bg-[#fff8e6] px-4 py-3 text-xs leading-5 text-slate-700">
-                    El teléfono de contacto es opcional. Todos los demás campos son obligatorios.
-                    El archivo adjunto debe pesar máximo 8 MB.
+                    Son obligatorios: nombre(s), apellidos, sede de adscripción, nivel al que
+                    imparte, asignatura(s), correo electrónico, archivo adjunto y curso. Son
+                    opcionales: institución, grupo(s) asignado(s) y teléfono de contacto. El archivo
+                    adjunto debe pesar máximo 8 MB.
                   </p>
 
                   {status === 'error' && (
